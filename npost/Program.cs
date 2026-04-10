@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +8,7 @@ using npost.Core;
 using npost.Data;
 using npost.Infraestrutura;
 using npost.Middlewares;
+using npost.Service;
 using Constants = npost.Core.Constants;
 using Secret = npost.Core.Secret;
 
@@ -117,10 +119,10 @@ internal class Program
         
         if (app.Environment.IsDevelopment())
         {
-            //Print para utilizar no Swagger
-            // var token = TokenService.Generation("14492082409", Constants.CodSistema, 1, 1, 1,1, 600);
-            // Debug.Print(token);
-            // Console.WriteLine(token);
+            // Print para utilizar no Swagger
+             var token = TokenService.Generation(1, 240, true);
+             Debug.Print(token);
+             Console.WriteLine(token);
         
             app.UseCors("AllowAll");
             app.UseSwagger();

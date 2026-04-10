@@ -29,7 +29,7 @@ public class UserService(UserDAO dao, UnitOfWork unitOfWork)
             throw new BusinessException("Email ou senha inválidos.");
         }
 
-        var senhaCriptografada = Criptografia.sha256(dto.Senha!);
+        var senhaCriptografada = Criptografia.sha256(dto.password!);
         if (usuario.Senha != senhaCriptografada)
         {
             throw new BusinessException("Email ou senha inválidos.");
