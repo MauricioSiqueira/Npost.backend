@@ -25,4 +25,12 @@ public class UserController(UserService service) : ControllerBase
         var result = await service.LoginAsync(model);
         return Ok(result);
     }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> LogoutAsync()
+    {
+        await service.LogoutAsync();
+        return Ok(new EndPointResponse { });
+    }
 }

@@ -42,6 +42,11 @@ public class UserService(UserDAO dao, UnitOfWork unitOfWork)
         };
     }
 
+    public Task LogoutAsync()
+    {
+        return Task.CompletedTask;
+    }
+
     private Usuario ToUsuario(UsuarioInputDTO dto)
     {
         return new Usuario
