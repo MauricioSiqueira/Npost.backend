@@ -17,4 +17,12 @@ public class UserController(UserService service) : ControllerBase
         await service.CreateAsyc(model);
         return Ok(new EndPointResponse { });
     }
+
+    [AllowAnonymous]
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginAsync([FromBody] UserLoginInputDTO model)
+    {
+        var result = await service.LoginAsync(model);
+        return Ok(result);
+    }
 }

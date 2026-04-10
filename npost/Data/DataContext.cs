@@ -23,6 +23,7 @@ public partial class DataContext : DbContext
         modelBuilder.Entity<Usuario>(entity =>
         {
             entity.HasKey(e => e.UsuarioId).HasName(EnumConstraints.pkUsuario.ToString());
+            entity.HasIndex(e => e.Email).IsUnique();
         });
         
         // Forçar todas as colunas String para não-unicode ou seja Varchar e não Nvarchar

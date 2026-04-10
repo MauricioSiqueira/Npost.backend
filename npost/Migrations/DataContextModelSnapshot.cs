@@ -80,6 +80,9 @@ namespace npost.Migrations
                     b.HasKey("UsuarioId")
                         .HasName("pkUsuario");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("usuarios");
                 });
 #pragma warning restore 612, 618
