@@ -1,0 +1,34 @@
+﻿{
+  "profiles": {
+    ".Development (Local)": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://localhost:6001/swagger/index.html",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "PGHOST": "localhost",
+        "PGUSER": "postgres",
+        "PGPASSWORD": "1234",
+        "PGPORT": "5432",
+        "JWT_SECRETKEY": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      },
+      "applicationUrl": "http://*:6002;https://*:6001"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {
+        "ASPNETCORE_HTTP_PORTS": "8080",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "PGHOST": "localhost",
+        "PGUSER": "postgres",
+        "PGPASSWORD": "1234",
+        "PGPORT": "5432",
+        "JWT_SECRETKEY": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      },
+      "publishAllPorts": true,
+      "useSSL": false
+    }
+  }
+}
