@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using npost.Models;
 namespace npost.Core.Auth.Model;
 
 public class Usuario
@@ -34,4 +35,6 @@ public class Usuario
     
     [StringLength(11)] 
     public bool DarkMode { get; set; } = false;
+
+    public virtual ICollection<Notation>? Notations { get; set; }
 }

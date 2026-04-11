@@ -85,6 +85,55 @@ namespace npost.Migrations
 
                     b.ToTable("usuarios");
                 });
+
+            modelBuilder.Entity("npost.Models.Notation", b =>
+                {
+                    b.Property<int>("NotationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("notationid");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NotationId"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text")
+                        .HasColumnName("content");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(70)")
+                        .HasColumnName("title");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("userid");
+
+                    b.HasKey("NotationId")
+                        .HasName("pkNotation");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("notations");
+                });
+
+            modelBuilder.Entity("npost.Models.Notation", b =>
+                {
+                    b.HasOne("npost.Core.Auth.Model.Usuario", "User")
+                        .WithMany("Notations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fkNotationUsuario");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("npost.Core.Auth.Model.Usuario", b =>
+                {
+                    b.Navigation("Notations");
+                });
 #pragma warning restore 612, 618
         }
     }

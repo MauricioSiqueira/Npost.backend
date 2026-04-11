@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using npost.Core.Auth.Model;
+using npost.Models;
 
 namespace npost.Data;
 
@@ -14,6 +15,7 @@ public partial class DataContext : DbContext
     {
     }
     public virtual DbSet<Usuario> Usuarios { get; set; }
+    public virtual DbSet<Notation> Notations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,7 +27,18 @@ public partial class DataContext : DbContext
             entity.HasKey(e => e.UsuarioId).HasName(EnumConstraints.pkUsuario.ToString());
             entity.HasIndex(e => e.Email).IsUnique();
         });
-        
+
+        modelBuilder.Entity<Notation>(entity =>
+        {
+            entity.HasKey(e => e.NotationId).HasName(EnumConstraints.pkNotation.ToString());
+            
+            entity.HasOne(d => d.User)
+                .WithMany(p => p.Notations)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName(EnumConstraints.fkNotationUsuario.ToString());
+        });
+
         // Forçar todas as colunas String para não-unicode ou seja Varchar e não Nvarchar
         // desde que nenhum tipo de coluna seja definido explicitamente com HasColumnType.
         foreach (var property in modelBuilder.Model.GetEntityTypes()
