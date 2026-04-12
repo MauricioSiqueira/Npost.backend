@@ -10,7 +10,7 @@
         "PGUSER": "postgres",
         "PGPASSWORD": "1234",
         "PGPORT": "5432",
-        "JWT_SECRETKEY": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "JWT_SECRETKEY": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       },
       "applicationUrl": "http://*:6002;https://*:6001"
     },
@@ -25,7 +25,7 @@
         "PGUSER": "postgres",
         "PGPASSWORD": "1234",
         "PGPORT": "5432",
-        "JWT_SECRETKEY": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "JWT_SECRETKEY": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       },
       "publishAllPorts": true,
       "useSSL": false
