@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace npost.Migrations
 {
     /// <inheritdoc />
-    public partial class _001 : Migration
+    public partial class InitialCreate0001 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,8 +38,7 @@ namespace npost.Migrations
                 name: "notations",
                 columns: table => new
                 {
-                    notationid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    notationid = table.Column<Guid>(type: "uuid", nullable: false),
                     userid = table.Column<int>(type: "integer", nullable: false),
                     title = table.Column<string>(type: "character varying(70)", unicode: false, maxLength: 70, nullable: false),
                     content = table.Column<string>(type: "text", nullable: true)

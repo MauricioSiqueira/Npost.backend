@@ -33,4 +33,12 @@ public class UserController(UserService service) : ControllerBase
         await service.LogoutAsync();
         return Ok(new EndPointResponse { });
     }
+
+    [Authorize]
+    [HttpPut("preferences/theme")]
+    public async Task<IActionResult> UpdateThemePreferenceAsync([FromBody] UserThemePreferenceInputDTO model)
+    {
+        var result = await service.UpdateThemePreferenceAsync(model);
+        return Ok(result);
+    }
 }

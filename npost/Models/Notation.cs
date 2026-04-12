@@ -7,8 +7,8 @@ namespace npost.Models
     public class Notation
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int NotationId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid NotationId { get; set; } = Guid.NewGuid();
 
         [Required]
         public int UserId { get; set; }

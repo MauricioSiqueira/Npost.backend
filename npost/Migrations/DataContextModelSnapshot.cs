@@ -88,12 +88,9 @@ namespace npost.Migrations
 
             modelBuilder.Entity("npost.Models.Notation", b =>
                 {
-                    b.Property<int>("NotationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                    b.Property<Guid>("NotationId")
+                        .HasColumnType("uuid")
                         .HasColumnName("notationid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NotationId"));
 
                     b.Property<string>("Content")
                         .HasColumnType("text")

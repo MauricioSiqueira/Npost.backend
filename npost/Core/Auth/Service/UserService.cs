@@ -6,7 +6,7 @@ using npost.Service;
 
 namespace npost.Core.Auth.Service;
 
-public class UserService(UserDAO dao, UnitOfWork unitOfWork)
+public class UserService(UserDAO dao, UnitOfWork unitOfWork, TokenService tokenService)
 {
     public async Task CreateAsyc(UsuarioInputDTO dto)
     {
@@ -38,7 +38,26 @@ public class UserService(UserDAO dao, UnitOfWork unitOfWork)
         return new UserLoginOutputDTO
         {
             UserName = usuario.Nome + " " +  usuario.Sobrenome,
+            Email = usuario.Email,
+            DarkMode = usuario.DarkMode,
             Token = TokenService.Generation(usuario.UsuarioId!.Value, npost.Core.Constants.TokenExpire)
+        };
+    }
+
+    public async Task<UserThemePreferenceOutputDTO> UpdateThemePreferenceAsync(UserThemePreferenceInputDTO dto)
+    {
+        var usuario = await dao.GetByIdAsync(tokenService.GetUsuario());
+        if (usuario is null)
+        {
+            throw new BusinessException("Usuário não encontrado.");
+        }
+
+        usuario.DarkMode = dto.DarkMode;
+        await unitOfWork.CommitAsync();
+
+        return new UserThemePreferenceOutputDTO
+        {
+            DarkMode = usuario.DarkMode
         };
     }
 

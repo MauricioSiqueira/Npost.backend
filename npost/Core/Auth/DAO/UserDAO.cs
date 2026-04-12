@@ -16,4 +16,9 @@ public class UserDAO(DataContext db, UnitOfWork unitOfWork)
     {
         return db.Usuarios.FirstOrDefaultAsync(x => x.Email == email);
     }
+
+    public Task<Usuario?> GetByIdAsync(int userId)
+    {
+        return db.Usuarios.FirstOrDefaultAsync(x => x.UsuarioId == userId);
+    }
 }

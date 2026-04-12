@@ -12,8 +12,8 @@ using npost.Data;
 namespace npost.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260411141545_001")]
-    partial class _001
+    [Migration("20260411171615_InitialCreate0001")]
+    partial class InitialCreate0001
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,12 +91,9 @@ namespace npost.Migrations
 
             modelBuilder.Entity("npost.Models.Notation", b =>
                 {
-                    b.Property<int>("NotationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                    b.Property<Guid>("NotationId")
+                        .HasColumnType("uuid")
                         .HasColumnName("notationid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NotationId"));
 
                     b.Property<string>("Content")
                         .HasColumnType("text")
