@@ -51,4 +51,10 @@ public class NotationDAO(DataContext db, UnitOfWork unitOfWork)
             })
             .ToListAsync();
     }
+
+    public async Task DeleteAsync(Notation notation)
+    {
+        db.Notations.Remove(notation);
+        await unitOfWork.SaveAsync();
+    }
 }

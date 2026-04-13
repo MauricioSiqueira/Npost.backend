@@ -69,6 +69,16 @@ public class NotationService(TokenService tokenService, UnitOfWork unitOfWork, N
 
         return ToDetails(notation);
     }
+
+    public async Task DeleteAsync(Guid notationId)
+    {
+        var notation = await dao.GetOwnedNotationAsync(notationId, tokenService.GetUsuario());
+        if (notation is null)
+            throw new BusinessException("notation not found");
+
+        await dao.DeleteAsync(notation);
+        await unitOfWork.CommitAsync();
+    }
     
     private static NotationDetailsDTO ToDetails(Notation notation)
     {

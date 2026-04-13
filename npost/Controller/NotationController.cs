@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using npost.Data;
 using npost.DTOs;
 using npost.Service;
 
@@ -43,5 +44,12 @@ public class NotationController(NotationService service) : ControllerBase
     {
         var result = await service.UpdateAsync(notationId, model);
         return Ok(result);
+    }
+
+    [HttpDelete("{notationId:guid}")]
+    public async Task<IActionResult> DeleteAsync(Guid notationId)
+    {
+        await service.DeleteAsync(notationId);
+        return Ok(new EndPointResponse { });
     }
 }
