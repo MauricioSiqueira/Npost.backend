@@ -1,6 +1,8 @@
 using npost.Core.Auth.DAO;
 using npost.Core.Auth.DTO;
 using npost.Core.Auth.Model;
+using npost.Core;
+using System.Security.Cryptography;
 using npost.Middlewares;
 using npost.Service;
 
@@ -35,13 +37,31 @@ public class UserService(UserDAO dao, UnitOfWork unitOfWork, TokenService tokenS
             throw new BusinessException("Email ou senha inválidos.");
         }
 
-        return new UserLoginOutputDTO
+        var output = BuildLoginOutput(usuario);
+        await PersistChangesAsync();
+
+        return output;
+    }
+
+    public async Task<UserLoginOutputDTO?> RefreshTokenAsync(UserRefreshInputDTO dto)
+    {
+        var refreshToken = dto.RefreshToken?.Trim();
+        if (string.IsNullOrWhiteSpace(refreshToken))
         {
-            UserName = usuario.Nome + " " +  usuario.Sobrenome,
-            Email = usuario.Email,
-            DarkMode = usuario.DarkMode,
-            Token = TokenService.Generation(usuario.UsuarioId!.Value, npost.Core.Constants.TokenExpire)
-        };
+            return null;
+        }
+
+        var refreshTokenHash = Criptografia.sha256(refreshToken);
+        var usuario = await dao.GetByRefreshTokenHashAsync(refreshTokenHash, DateTime.UtcNow);
+        if (usuario is null)
+        {
+            return null;
+        }
+
+        var output = BuildLoginOutput(usuario);
+        await PersistChangesAsync();
+
+        return output;
     }
 
     public async Task<UserThemePreferenceOutputDTO> UpdateThemePreferenceAsync(UserThemePreferenceInputDTO dto)
@@ -53,7 +73,7 @@ public class UserService(UserDAO dao, UnitOfWork unitOfWork, TokenService tokenS
         }
 
         usuario.DarkMode = dto.DarkMode;
-        await unitOfWork.CommitAsync();
+        await PersistChangesAsync();
 
         return new UserThemePreferenceOutputDTO
         {
@@ -63,7 +83,7 @@ public class UserService(UserDAO dao, UnitOfWork unitOfWork, TokenService tokenS
 
     public Task LogoutAsync()
     {
-        return Task.CompletedTask;
+        return LogoutInternalAsync();
     }
 
     private Usuario ToUsuario(UsuarioInputDTO dto)
@@ -102,5 +122,58 @@ public class UserService(UserDAO dao, UnitOfWork unitOfWork, TokenService tokenS
     private static string NormalizeEmail(string? email)
     {
         return email!.Trim().ToLowerInvariant();
+    }
+
+    private UserLoginOutputDTO BuildLoginOutput(Usuario usuario)
+    {
+        var accessToken = tokenService.RefreshToken(usuario.UsuarioId!.Value);
+        var refreshToken = GenerateRefreshToken();
+
+        usuario.RefreshTokenHash = Criptografia.sha256(refreshToken);
+        usuario.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(Constants.RefreshTokenExpireDays);
+
+        return new UserLoginOutputDTO
+        {
+            UserName = usuario.Nome + " " + usuario.Sobrenome,
+            Email = usuario.Email,
+            DarkMode = usuario.DarkMode,
+            Token = accessToken,
+            RefreshToken = refreshToken
+        };
+    }
+
+    private async Task LogoutInternalAsync()
+    {
+        var userId = tokenService.GetUsuario();
+        var usuario = await dao.GetByIdAsync(userId);
+        if (usuario is null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(usuario.RefreshTokenHash) && usuario.RefreshTokenExpiresAt is null)
+        {
+            return;
+        }
+
+        usuario.RefreshTokenHash = null;
+        usuario.RefreshTokenExpiresAt = null;
+        await PersistChangesAsync();
+    }
+
+    private async Task PersistChangesAsync()
+    {
+        await unitOfWork.SaveAsync();
+        await unitOfWork.CommitAsync();
+    }
+
+    private static string GenerateRefreshToken()
+    {
+        var randomBytes = RandomNumberGenerator.GetBytes(64);
+        var token = Convert.ToBase64String(randomBytes);
+        return token
+            .Replace("+", "-")
+            .Replace("/", "_")
+            .Replace("=", "");
     }
 }

@@ -21,4 +21,12 @@ public class UserDAO(DataContext db, UnitOfWork unitOfWork)
     {
         return db.Usuarios.FirstOrDefaultAsync(x => x.UsuarioId == userId);
     }
+
+    public Task<Usuario?> GetByRefreshTokenHashAsync(string refreshTokenHash, DateTime nowUtc)
+    {
+        return db.Usuarios.FirstOrDefaultAsync(
+            x => x.RefreshTokenHash == refreshTokenHash &&
+                 x.RefreshTokenExpiresAt != null &&
+                 x.RefreshTokenExpiresAt >= nowUtc);
+    }
 }

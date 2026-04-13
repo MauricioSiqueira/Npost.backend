@@ -30,7 +30,7 @@ public class TokenService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims.ToArray()),
-            Expires = DateTime.Now.AddMinutes(tokenExpire),
+            Expires = DateTime.UtcNow.AddMinutes(tokenExpire),
 
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Secret.GetJWTEncodedSecretKeyToken()),
             SecurityAlgorithms.HmacSha256Signature),
@@ -39,11 +39,14 @@ public class TokenService
         return bearer ? "Bearer " + tokenHandler.WriteToken(token) : tokenHandler.WriteToken(token);
     }
 
-    public string RefreshToken()
+    public string RefreshToken(int? usuarioId = null)
     {
-        var claims = _httpContextAccessor.HttpContext!.User.Claims;
-        var usuarioId = int.Parse(claims!.First(x => x.Type == Constants.ClaimUsuario).Value);
+        if (!usuarioId.HasValue)
+        {
+            var claims = _httpContextAccessor.HttpContext!.User.Claims;
+            usuarioId = int.Parse(claims!.First(x => x.Type == Constants.ClaimUsuario).Value);
+        }
 
-        return Generation( usuarioId, Constants.TokenExpire);
+        return Generation(usuarioId.Value, Constants.TokenExpire);
     }
 }

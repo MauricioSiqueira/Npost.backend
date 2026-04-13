@@ -89,6 +89,8 @@ internal class Program
                     IssuerSigningKey = new SymmetricSecurityKey(Secret.GetJWTEncodedSecretKeyToken()),
                     ValidateIssuer = false,
                     ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromSeconds(30),
                 };
         
             });

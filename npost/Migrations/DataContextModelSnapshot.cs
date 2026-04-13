@@ -56,6 +56,16 @@ namespace npost.Migrations
                         .HasColumnType("character varying(30)")
                         .HasColumnName("nome");
 
+                    b.Property<DateTime?>("RefreshTokenExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("refreshtokenexpiresat");
+
+                    b.Property<string>("RefreshTokenHash")
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("refreshtokenhash");
+
                     b.Property<string>("Senha")
                         .IsRequired()
                         .HasMaxLength(64)

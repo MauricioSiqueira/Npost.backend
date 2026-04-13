@@ -33,4 +33,22 @@ public class NotationDAO(DataContext db, UnitOfWork unitOfWork)
             })
             .ToListAsync();
     }
+
+    public async Task<IReadOnlyList<NotationListItemDTO>> SearchByTitleAsync(
+        int userId,
+        string titleQuery)
+    {
+        return await db.Notations
+            .AsNoTracking()
+            .Where(x =>
+                x.UserId == userId &&
+                EF.Functions.ILike(x.Title ?? string.Empty, $"%{titleQuery}%"))
+            .OrderBy(x => x.Title)
+            .Select(x => new NotationListItemDTO
+            {
+                NotationId = x.NotationId,
+                Title = x.Title ?? string.Empty,
+            })
+            .ToListAsync();
+    }
 }

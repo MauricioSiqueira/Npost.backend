@@ -17,6 +17,13 @@ public class NotationController(NotationService service) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchByTitleAsync([FromQuery] string? query)
+    {
+        var result = await service.SearchByTitleAsync(query);
+        return Ok(result);
+    }
+
     [HttpGet("{notationId:guid}")]
     public async Task<IActionResult> GetByIdAsync(Guid notationId)
     {

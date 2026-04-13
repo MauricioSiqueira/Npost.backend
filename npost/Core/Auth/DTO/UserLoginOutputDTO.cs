@@ -6,4 +6,5 @@ public class UserLoginOutputDTO
     public string? Email { get; set; }
     public bool DarkMode { get; set; }
     public string? Token { get; set; }
+    public string? RefreshToken { get; set; }
 }

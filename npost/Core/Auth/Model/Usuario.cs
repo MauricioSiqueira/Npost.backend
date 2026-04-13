@@ -36,5 +36,11 @@ public class Usuario
     [StringLength(11)] 
     public bool DarkMode { get; set; } = false;
 
+    [StringLength(64)]
+    public string? RefreshTokenHash { get; set; }
+
+    [Column(TypeName = "timestamp with time zone")]
+    public DateTime? RefreshTokenExpiresAt { get; set; }
+
     public virtual ICollection<Notation>? Notations { get; set; }
 }
