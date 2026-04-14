@@ -1,0 +1,40 @@
+name : Deploy Prod
+on:
+  push:
+    branches: [ Prod ]
+
+env: 
+  IMAGE_NAME: npost.backend
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+  
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      
+      - name: Build project
+        run: dotnet build --configuration Release ./npost/npost.csproj
+      
+      - name: Publish app
+        run: dotnet publish ./npost/npost.csproj -c Release -o ./publish
+  
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name : Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
