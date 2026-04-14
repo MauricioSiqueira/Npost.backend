@@ -1,7 +1,8 @@
 name : Deploy Prod
 on:
-  push:
-    branches: [ Prod ]
+    workflow_dispatch:
+  # push:
+  #   branches: [ Prod ]
 
 env: 
   IMAGE_NAME: npost.backend
