@@ -116,10 +116,6 @@ internal class Program
          });
         
         var app = builder.Build();
-        ApplyMigrations(app);
-        
-        // AzureBlobFile.CreateContainerIfNotExists(Constants.BlobContainer);
-        
         if (app.Environment.IsDevelopment())
         {
             // Print para utilizar no Swagger
@@ -146,12 +142,5 @@ internal class Program
         app.MapControllers().RequireAuthorization();
         app.MapControllers();
         app.Run();
-    }
-
-    private static void ApplyMigrations(WebApplication app)
-    {
-        using var scope = app.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-        dbContext.Database.Migrate();
     }
 }
