@@ -26,7 +26,7 @@ jobs:
         run: dotnet build --configuration Release ./npost/npost.csproj
       
       - name: Publish app
-        run: dotnet publish ./npost/npost.csproj -c Release -o ./publish
+        run: dotnet publish ./npost/npost.csproj -c Release -o ./npost/publish
   
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
